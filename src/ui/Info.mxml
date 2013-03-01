@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:UIComponent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<mx:Container xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			  xmlns:s="library://ns.adobe.com/flex/spark" 
 			  xmlns:mx="library://ns.adobe.com/flex/mx" 
-			  width="100%" height="100%"
-			  creationComplete="_init(event)">
+			  width="400" height="300" 
+			  creationComplete="_init(event);">
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -12,31 +13,28 @@
 		<![CDATA[
 			import com.superLeoBurnett.classes.game.mvc.GameController;
 			import com.superLeoBurnett.classes.game.mvc.GameModel;
+			import com.superLeoBurnett.classes.utils.FPSCounter;
 			
 			import mx.events.FlexEvent;
 			
-			private static const CONTENT	: String = 'test.swf';
-			
-			private var _model				: GameModel;
+			private var _model		: GameModel;
+			private var _fps 		: FPSCounter;
 			
 			private function _init(event:FlexEvent) : void
 			{
 				_model = GameModel.instance;
-				_model.addEventListener(GameController.UNITY_LOAD_COMPLETE, _onUnityContentLoaderComplete);
 				_model.addEventListener(GameController.UNITY_INIT, _unityInitComplete);
-				_model.startLoad(CONTENT);
-			}
-			
-			private function _onUnityContentLoaderComplete($e:Event) : void
-			{
-				this.addChild(_model.unityContentLoader);
-				_model.unityContentLoader.unityContent.setContentHost(_model);
 			}
 			
 			private function _unityInitComplete($e:Event) : void
 			{
-				// ...
+				_fps = new FPSCounter(8, 40, 0xFFFFFF, false);
+				lb.text = 'Initialized engine version: 4.0.0f7 \n' + 'MolehillGfxDevice: OpenGL';
+				containter.addChild(_fps);
 			}
 		]]>
 	</fx:Script>
-</mx:UIComponent>
+	
+	<mx:UIComponent id="containter" width="400" height="300"/>
+	<s:Label id="lb" width="200" height="40" x="10" y="10" color="0xFFFFFF"/>
+</mx:Container>
